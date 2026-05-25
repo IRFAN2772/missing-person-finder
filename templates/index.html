@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Missing Person Finder - Home{% endblock %}
+
+{% block content %}
+<section class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-3">
+            <i class="bi bi-search-heart"></i> Missing Person Finder
+        </h1>
+        <p class="lead mb-4">
+            Helping reunite missing individuals with their families using facial recognition technology.
+        </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{{ url_for('register.register') }}" class="btn btn-light btn-lg px-4">
+                <i class="bi bi-person-plus"></i> Register Missing Person
+            </a>
+            <a href="{{ url_for('search.search') }}" class="btn btn-outline-light btn-lg px-4">
+                <i class="bi bi-camera"></i> Search by Photo
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <a href="{{ url_for('register.register') }}" class="text-decoration-none">
+                    <div class="card h-100 p-4 text-center hover-card">
+                        <div class="card-body">
+                            <i class="bi bi-person-plus-fill text-primary" style="font-size: 3rem;"></i>
+                            <h4 class="mt-3 text-dark">Register</h4>
+                            <p class="text-muted">Register a missing person with their photo and details. The system will encode their face for future matching.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="{{ url_for('search.search') }}" class="text-decoration-none">
+                    <div class="card h-100 p-4 text-center hover-card">
+                        <div class="card-body">
+                            <i class="bi bi-upload text-primary" style="font-size: 3rem;"></i>
+                            <h4 class="mt-3 text-dark">Upload & Search</h4>
+                            <p class="text-muted">Upload a photo of someone you've found. Our system will compare it against all registered missing persons.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="{{ url_for('search.search') }}" class="text-decoration-none">
+                    <div class="card h-100 p-4 text-center hover-card">
+                        <div class="card-body">
+                            <i class="bi bi-heart-fill text-primary" style="font-size: 3rem;"></i>
+                            <h4 class="mt-3 text-dark">Reunite</h4>
+                            <p class="text-muted">If a match is found, contact details are provided to help reunite the missing person with their family.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <div class="card p-4">
+                    <h5 class="text-muted mb-3">Database Status</h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h2 class="text-primary fw-bold">{{ total_registered }}</h2>
+                            <p class="text-muted">Persons Registered</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h2 class="text-warning fw-bold">{{ total_missing }}</h2>
+                            <p class="text-muted">Currently Missing</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h2 class="text-success fw-bold">{{ total_found }}</h2>
+                            <p class="text-muted">Found & Reunited</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

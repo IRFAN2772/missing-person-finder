@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h2 class="text-center mb-2">
+                <i class="bi bi-clipboard-data text-primary"></i> Search Results
+            </h2>
+            <p class="text-center text-muted mb-4">
+                Compared against {{ total_checked }} registered person(s).
+            </p>
+
+            {% if matches %}
+                <div class="alert alert-success text-center">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <strong>{{ matches|length }} match(es) found!</strong>
+                </div>
+
+                <div class="row g-4">
+                    {% for match in matches %}
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="row g-0">
+                                <div class="col-5">
+                                    <img src="{{ url_for('static', filename='uploads/' + match.person.image_filename) }}"
+                                         class="img-fluid rounded-start h-100" style="object-fit: cover;" alt="Photo">
+                                </div>
+                                <div class="col-7">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <h5 class="card-title mb-1">{{ match.person.name }}</h5>
+                                            <span class="badge bg-success">{{ match.confidence }}%</span>
+                                        </div>
+                                        <small class="text-muted">Confidence Score</small>
+
+                                        <hr class="my-2">
+
+                                        <p class="mb-1"><strong>Age:</strong> {{ match.person.age }}</p>
+                                        <p class="mb-1"><strong>Gender:</strong> {{ match.person.gender }}</p>
+                                        <p class="mb-1"><strong>Last Seen:</strong> {{ match.person.last_seen_location }}</p>
+                                        {% if match.person.last_seen_date %}
+                                        <p class="mb-1"><strong>Date:</strong> {{ match.person.last_seen_date }}</p>
+                                        {% endif %}
+                                        <p class="mb-1"><strong>Contact:</strong> {{ match.person.contact_info }}</p>
+                                        {% if match.person.additional_info %}
+                                        <p class="mb-0"><small class="text-muted">{{ match.person.additional_info }}</small></p>
+                                        {% endif %}
+
+                                        <form method="POST" action="{{ url_for('search.mark_found', person_id=match.person.id) }}" class="mt-2">
+                                            <button type="submit" class="btn btn-success btn-sm w-100">
+                                                <i class="bi bi-check2-circle"></i> Mark as Found
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-warning text-center">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <strong>No matches found.</strong>
+                    <p class="mb-0 mt-2">The uploaded face did not match any registered missing persons.</p>
+                </div>
+            {% endif %}
+
+            <div class="text-center mt-4">
+                <a href="{{ url_for('search.search') }}" class="btn btn-primary">
+                    <i class="bi bi-arrow-repeat"></i> Search Again
+                </a>
+                <a href="{{ url_for('home') }}" class="btn btn-outline-secondary ms-2">
+                    <i class="bi bi-house"></i> Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

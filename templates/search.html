@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Search for Missing Person{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card p-4">
+                <h2 class="text-center mb-4">
+                    <i class="bi bi-camera text-primary"></i> Search by Photo
+                </h2>
+                <p class="text-center text-muted mb-4">
+                    Upload a photo and our system will compare it against all registered missing persons using facial recognition.
+                </p>
+
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="row g-3">
+                        <!-- Image Upload -->
+                        <div class="col-md-12">
+                            <label for="image" class="form-label">Upload Photo *</label>
+                            <div class="border rounded p-4 text-center" id="dropZone" style="border-style: dashed !important; cursor: pointer;">
+                                <i class="bi bi-cloud-upload text-primary" style="font-size: 3rem;"></i>
+                                <p class="mt-2 mb-0">Click or drag & drop a photo here</p>
+                                <small class="text-muted">PNG, JPG, JPEG (max 16MB)</small>
+                            </div>
+                            <input type="file" class="form-control d-none" id="image" name="image"
+                                   accept=".png,.jpg,.jpeg" required>
+                        </div>
+
+                        <!-- Image Preview -->
+                        <div class="col-md-12 text-center d-none" id="previewContainer">
+                            <img id="imagePreview" class="img-fluid rounded" style="max-height: 300px;" alt="Preview">
+                            <p class="mt-2 text-muted">Image ready for search</p>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-search"></i> Search for Match
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('image');
+    const preview = document.getElementById('imagePreview');
+    const container = document.getElementById('previewContainer');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('bg-light');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('bg-light');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('bg-light');
+        if (e.dataTransfer.files.length) {
+            fileInput.files = e.dataTransfer.files;
+            showPreview(e.dataTransfer.files[0]);
+        }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files[0]) {
+            showPreview(e.target.files[0]);
+        }
+    });
+
+    function showPreview(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            preview.src = e.target.result;
+            container.classList.remove('d-none');
+            dropZone.classList.add('d-none');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    document.querySelector('form').addEventListener('submit', function() {
+        const btn = this.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Searching... Comparing faces';
+    });
+</script>
+{% endblock %}

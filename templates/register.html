@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Register Missing Person{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card p-4">
+                <h2 class="text-center mb-4">
+                    <i class="bi bi-person-plus text-primary"></i> Register Missing Person
+                </h2>
+                <p class="text-center text-muted mb-4">
+                    Fill in the details below and upload a clear photo of the missing person's face.
+                </p>
+
+                <form method="POST" enctype="multipart/form-data" id="registerForm">
+                    <div class="row g-3">
+                        <!-- Name -->
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Full Name *</label>
+                            <input type="text" class="form-control" id="name" name="name" required
+                                   placeholder="Enter full name">
+                        </div>
+
+                        <!-- Age -->
+                        <div class="col-md-3">
+                            <label for="age" class="form-label">Age *</label>
+                            <input type="number" class="form-control" id="age" name="age" required
+                                   min="0" max="150" placeholder="Age">
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="col-md-3">
+                            <label for="gender" class="form-label">Gender *</label>
+                            <select class="form-select" id="gender" name="gender" required>
+                                <option value="">Select</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Last Seen Location -->
+                        <div class="col-md-6">
+                            <label for="last_seen_location" class="form-label">Last Seen Location *</label>
+                            <input type="text" class="form-control" id="last_seen_location" name="last_seen_location"
+                                   required placeholder="City, Area, Landmark">
+                        </div>
+
+                        <!-- Last Seen Date -->
+                        <div class="col-md-6">
+                            <label for="last_seen_date" class="form-label">Last Seen Date</label>
+                            <input type="date" class="form-control" id="last_seen_date" name="last_seen_date">
+                        </div>
+
+                        <!-- Contact Info -->
+                        <div class="col-md-12">
+                            <label for="contact_info" class="form-label">Contact Information *</label>
+                            <input type="text" class="form-control" id="contact_info" name="contact_info"
+                                   required placeholder="Phone number or email for contact">
+                        </div>
+
+                        <!-- Additional Info -->
+                        <div class="col-md-12">
+                            <label for="additional_info" class="form-label">Additional Information</label>
+                            <textarea class="form-control" id="additional_info" name="additional_info"
+                                      rows="3" placeholder="Any distinguishing features, clothing, etc."></textarea>
+                        </div>
+
+                        <!-- Image Upload -->
+                        <div class="col-md-12">
+                            <label for="image" class="form-label">Photo of Missing Person *</label>
+                            <input type="file" class="form-control" id="image" name="image"
+                                   accept=".png,.jpg,.jpeg" required>
+                            <div class="form-text">
+                                Upload a clear, front-facing photo. Supported formats: PNG, JPG, JPEG (max 16MB).
+                            </div>
+                        </div>
+
+                        <!-- Image Preview -->
+                        <div class="col-md-12 text-center d-none" id="previewContainer">
+                            <img id="imagePreview" class="img-fluid rounded" style="max-height: 300px;" alt="Preview">
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-check-circle"></i> Register Person
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('image').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('imagePreview');
+        const container = document.getElementById('previewContainer');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                container.classList.remove('d-none');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            container.classList.add('d-none');
+        }
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', function() {
+        const btn = this.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Registering... Please wait';
+    });
+</script>
+{% endblock %}
