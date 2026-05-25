@@ -399,3 +399,48 @@ FACE_MATCH_TOLERANCE   # 0.6 (Euclidean distance threshold)
 - Email/SMS notification when match found
 - Export data as CSV
 - Docker deployment
+
+---
+
+## Deployment
+
+This project is deployed on **Hugging Face Spaces** using Docker.
+
+**Live URL**: https://huggingface.co/spaces/irfanuddin/missing-person-finder
+
+### How to Push Updates
+
+```bash
+# 1. Make your changes, then:
+git add -A
+git commit -m "your commit message"
+
+# 2. Push to GitHub
+git push origin main
+
+# 3. Push to Hugging Face (triggers auto-redeploy)
+git push hf main
+```
+
+### If Token Expires (Authentication Fails)
+
+1. Go to https://huggingface.co/settings/tokens
+2. Create a new token (Type: **Write**)
+3. Update the remote URL:
+   ```bash
+   git remote set-url hf "https://irfanuddin:YOUR_NEW_TOKEN@huggingface.co/spaces/irfanuddin/missing-person-finder"
+   ```
+4. Push again: `git push hf main`
+
+### Alternative: Auto-Deploy from GitHub
+
+Instead of pushing to two remotes, you can link GitHub to HF:
+1. Go to your Space → **Settings** → **"Link a GitHub repository"**
+2. Connect `IRFAN2772/missing-person-finder`
+3. Now just `git push origin main` and HF auto-deploys
+
+### Build Notes
+
+- First deploy takes ~5-10 minutes (dlib C++ compilation)
+- Subsequent deploys are faster (Docker layer caching)
+- Watch build logs at: https://huggingface.co/spaces/irfanuddin/missing-person-finder/logs/build
