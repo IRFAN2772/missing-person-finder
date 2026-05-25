@@ -1,3 +1,12 @@
+---
+title: Missing Person Finder
+emoji: 🔍
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+---
+
 # Missing Person Finder
 
 A Flask-based web application that uses **facial recognition technology** to help find missing persons. It allows users to register missing individuals with their photos and details, then search for matches by uploading new photos.
