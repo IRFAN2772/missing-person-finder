@@ -10,13 +10,20 @@ RUN apt-get update && apt-get install -y \
     libgtk-3-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Speed up dlib compilation with parallel build
+ENV CMAKE_BUILD_PARALLEL_LEVEL=4
+ENV MAKEFLAGS="-j4"
+
 # Create app directory
 WORKDIR /app
 
 # Create a non-root user (HF Spaces requirement)
 RUN useradd -m -u 1000 appuser
 
-# Copy requirements first for better caching
+# Install dlib first (heaviest step - cached separately)
+RUN pip install --no-cache-dir cmake dlib
+
+# Copy requirements and install remaining deps
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir gunicorn
