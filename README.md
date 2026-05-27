@@ -7,6 +7,9 @@ sdk: docker
 app_port: 7860
 ---
 
+# .\venv\Scripts\python.exe app.py
+# Opens at http://localhost:5000
+
 # Missing Person Finder
 
 A Flask-based web application that uses **facial recognition technology** to help find missing persons. It allows users to register missing individuals with their photos and details, then search for matches by uploading new photos.
